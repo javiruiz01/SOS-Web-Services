@@ -4,72 +4,67 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class UserManagementWSSkeleton{
 
-	private static List<User> users = new ArrayList<User>();
-	private boolean instance = false;
-	// No puede ser un randomUUID, sería el username?
-	// Técnicamente el username es lo mismo que el user.getName()
-	private static Map<UUID, User> connected = new HashMap<UUID, User>();
-	private UUID userID;
-	private static UUID rootID; // para saber si está conectado
-	// Podríamos hacer que con el metodo init, cada vez que se cree una sesión
-	// nueva, hacer something
+	private static Map<Username, User> users = new HashMap<Username, User>();
+	private static boolean instance = false;
+	private static List<User> connected = new ArrayList<User>();
+	private static User root = new User();
+	private static Username usernameRoot = new Username(); 
+	private User userID;
 
-	// Funciona un constructor aqui o no sirve para nada?
 	public UserManagementWSSkeleton() {
-		if (instance == false) {
-			// Preguntar si el admin ya está dentro
-			if (connected.get(rootID) == null) {
-				// Si no está dentro, lo añadimos, y borramos todo lo que hubiera ya que 
-				// el root siempre está conectado y dentro
-				users.clear();
-				connected.clear();
-				User root = new User();
-				root.setName("admin");
-				root.setPwd("admin");
-				users.add(root);
-				rootID = UUID.randomUUID();
-				connected.put(rootID, root);
-				instance = true;
-			}
+		if ((!instance) && (!isConnected(root))) {
+			usernameRoot.setUsername("admin");
+			root.setName("admin");
+			root.setPwd("admin");
+			users.put(usernameRoot, root);
+			connected.add(root);
+			instance = true;
 		}
 	}
-
-	// Comprueba si el usuario existe, no si está conectado
-	private boolean exists (User user) {
+	
+	private boolean isConnected (User user) {
 		boolean result = false;
-		for (User user1: users) {
-			if (user1.getName().equals(user.getName())) {
+		for (User user1: connected) {
+			if (user1.equals(user)) {
 				result = true;
 				break;
 			}
 		}
 		return result;
 	}
-
+	
+	private boolean iAmRoot() {
+		if (this.userID.equals(root)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void logout(	)
 	{
-		// LLamada es ignorada si el usuario no estaba loggeado
-		connected.remove(userID);
+		connected.remove(this.userID);
 	}
 
 	public es.upm.fi.sos.t3.usermanagement.Response login	(
 			es.upm.fi.sos.t3.usermanagement.User user
 			)
 	{
-		// Hay que validar el usuario?? --> YES YES
 		Response response = new Response();
-		if ((exists(user) == false) || (connected.get(user) != null)) {
-			response.setResponse(false);
-		} else {
-			// Comprobación de la contraseña
-			
-			userID = UUID.randomUUID();
-			connected.put(userID, user);
-			response.setResponse(true);
+		response.setResponse(false);
+		Username username = new Username();
+		username.setUsername(user.getName());
+		// Hay que comprobar que el usuario no está conectado ya y que existe
+		if (!isConnected(user) && users.containsKey(username)) {
+			User user1 = users.get(username);
+			// Comprobamos credenciales
+			if (user1.getPwd().equals(user.getPwd())) {
+				connected.add(user);
+				response.setResponse(true);
+				this.userID = user;
+			}
 		}
 		return response;
 	}
@@ -79,11 +74,16 @@ public class UserManagementWSSkeleton{
 			)
 	{
 		Response response = new Response();
-		if (exists(user1) == false) {
-			response.setResponse(false);
-		} else {
-			users.add(user1);
+		// Username es el nombre del usuario
+		Username username1 = new Username();
+		username1.setUsername(user1.getName());
+		// Comprobamos si somos root y que el usuario no existía ya
+		if (iAmRoot() && (!users.containsKey(username1))) {
+			// Añadimos al usuario a la lista de creados
+			users.put(username1, user1);	
 			response.setResponse(true);
+		} else {
+			response.setResponse(false);
 		}
 		return response;
 	}
@@ -92,11 +92,9 @@ public class UserManagementWSSkeleton{
 			es.upm.fi.sos.t3.usermanagement.PasswordPair passwordPair
 			)
 	{
-		// Como sé quien llama a esta funcion?
-		// Y lo mismo para todas las que deberían ser solo llamadas por el superuser
-
-		// Comprobar si mi userID está en connected, y luego comprobar que soy el root
 		Response response = new Response();
+		
+		
 		return response;
 	}
 
@@ -104,15 +102,8 @@ public class UserManagementWSSkeleton{
 			es.upm.fi.sos.t3.usermanagement.Username username
 			)
 	{
-		Response response = new Response ();
-		response.setResponse(false);
-		for (User userToDelete: users) {
-			if (userToDelete.getName().equals(username)) {
-				response.setResponse(true);
-				users.remove(userToDelete);
-				return response;
-			}
-		}
-		return response;
+		//TODO : fill this with the necessary business logic
+		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#removeUser");
 	}
+
 }
