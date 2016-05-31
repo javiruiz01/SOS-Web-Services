@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 		<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl"
-			 xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-			 xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc"
-			 xmlns:wsoap="http://www.w3.org/ns/wsdl/soap"
-			 xmlns:tns="http://usermanagement.t3.sos.fi.upm.es"
-			 xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions"
-			 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			 xmlns:whttp="http://www.w3.org/ns/wsdl/http"
+			 xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+			 xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" 
+			 xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" 
+			 xmlns:tns="http://usermanagement.t3.sos.fi.upm.es" 
+			 xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" 
+			 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			 xmlns:whttp="http://www.w3.org/ns/wsdl/http" 
 			 targetNamespace="http://usermanagement.t3.sos.fi.upm.es">
 		<wsdl2:types>
         <xs:schema attributeFormDefault="qualified"
                    elementFormDefault="qualified"
                    targetNamespace="http://usermanagement.t3.sos.fi.upm.es">
-
-
+				   
+			
 			<xs:element name="username" type="xs:string" />
 			<xs:element name="password" type="xs:string" />
-
+			
 			<xs:element name="user">
 				<xs:complexType>
 					<xs:sequence>
@@ -25,7 +25,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-
+			
 			<xs:element name="passwordPair">
 				<xs:complexType>
 					<xs:sequence>
@@ -34,43 +34,45 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-
+             
             <xs:element name="response" minOccurs="1" nillable="false"	type="xs:boolean" />
-
+            
         </xs:schema>
     </wsdl2:types>
-
+    
     <wsdl2:interface name="userManagementInterface">
-	    <!-- the RPC style makes easier to map operations to single Java (or C#
-	    or whatever) methods, only applicable to in-out or in-only MEPs -->
-	    <wsdl2:operation name="login"
-				style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
-				<wsdl2:input element="tns:user" wsaw:Action="urn:login" />
-				<wsdl2:output element="tns:response" wsaw:Action="urn:loginResponse" />
-			</wsdl2:operation>
-
-			<wsdl2:operation name="logout"
-				pattern="http://www.w3.org/ns/wsdl/robust-in-only">
-				<wsdl2:input element="#none" wsaw:Action="urn:logout" />
-			</wsdl2:operation>
-
-	        <wsdl2:operation name="changePassword"
-				style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
-				<wsdl2:input element="tns:passwordPair" wsaw:Action="urn:changePassword" />
-				<wsdl2:output element="tns:response" wsaw:Action="urn:changePasswordResponse" />
-			</wsdl2:operation>
-
-	        <wsdl2:operation name="addUser"
-				style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
-				<wsdl2:input element="tns:user" wsaw:Action="urn:addUser" />
-				<wsdl2:output element="tns:response" wsaw:Action="urn:addUserResponse" />
-			</wsdl2:operation>
-
-	        <wsdl2:operation name="removeUser"
-				style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
-				<wsdl2:input element="tns:username" wsaw:Action="urn:removeUser" />
-				<wsdl2:output element="tns:response" wsaw:Action="urn:removeUserResponse" />
-			</wsdl2:operation>
+        
+        <!-- the RPC style makes easier to map operations to single Java (or C#
+        or whatever) methods, only applicable to in-out or in-only MEPs -->
+        <wsdl2:operation name="login"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:user" wsaw:Action="urn:login" />
+			<wsdl2:output element="tns:response" wsaw:Action="urn:loginResponse" />
+		</wsdl2:operation>
+		
+		<wsdl2:operation name="logout"
+			pattern="http://www.w3.org/ns/wsdl/robust-in-only">
+			<wsdl2:input element="#none" wsaw:Action="urn:logout" />
+		</wsdl2:operation>
+        
+        <wsdl2:operation name="changePassword"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:passwordPair" wsaw:Action="urn:changePassword" />
+			<wsdl2:output element="tns:response" wsaw:Action="urn:changePasswordResponse" />
+		</wsdl2:operation>
+        
+        <wsdl2:operation name="addUser"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:user" wsaw:Action="urn:addUser" />
+			<wsdl2:output element="tns:response" wsaw:Action="urn:addUserResponse" />
+		</wsdl2:operation>
+        
+        <wsdl2:operation name="removeUser"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:username" wsaw:Action="urn:removeUser" />
+			<wsdl2:output element="tns:response" wsaw:Action="urn:removeUserResponse" />
+		</wsdl2:operation>
+		       
     </wsdl2:interface>
 
 
@@ -84,9 +86,11 @@
         <wsdl2:operation ref="tns:changePassword" wsoap:action="urn:changePassword"/>
         <wsdl2:operation ref="tns:addUser" wsoap:action="urn:addUser"/>
         <wsdl2:operation ref="tns:removeUser" wsoap:action="urn:removeUser"/>
+        
     </wsdl2:binding>
 
     <wsdl2:service name="UserManagementWS" interface="tns:userManagementInterface">
         <wsdl2:endpoint name="userManagementEndPoint" binding="tns:userManagementSOAP12Binding" address="http://localhost:8080/axis2/services/UserManagementWS"/>
     </wsdl2:service>
 </wsdl2:description>
+

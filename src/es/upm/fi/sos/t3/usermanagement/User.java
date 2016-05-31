@@ -1,4 +1,3 @@
-
 /**
  * User.java
  *
@@ -6,9 +5,7 @@
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
  */
 
-
 package es.upm.fi.sos.t3.usermanagement;
-
 
 /**
  *  User bean class
@@ -16,7 +13,6 @@ package es.upm.fi.sos.t3.usermanagement;
 @SuppressWarnings({"unchecked","unused"})
 
 public  class User implements org.apache.axis2.databinding.ADBBean{
-
 	public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
 			"http://usermanagement.t3.sos.fi.upm.es",
 			"user",
