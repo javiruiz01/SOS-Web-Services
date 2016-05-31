@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST) -->
+<serviceGroup>
+    <service name="UserManagementWS">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="es.upm.fi.sos.t3.usermanagement.UserManagementWSMessageReceiverInOut"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/robust-in-only" class="es.upm.fi.sos.t3.usermanagement.UserManagementWSMessageReceiverRobustInOnly"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">es.upm.fi.sos.t3.usermanagement.UserManagementWSSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="logout" mep="http://www.w3.org/ns/wsdl/robust-in-only" namespace="http://usermanagement.t3.sos.fi.upm.es">
+            <actionMapping>urn:logout</actionMapping>
+            <outputActionMapping>urn:logoutResponse</outputActionMapping>
+        </operation>
+        <operation name="login" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://usermanagement.t3.sos.fi.upm.es">
+            <actionMapping>urn:login</actionMapping>
+            <outputActionMapping>urn:loginResponse</outputActionMapping>
+        </operation>
+        <operation name="addUser" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://usermanagement.t3.sos.fi.upm.es">
+            <actionMapping>urn:addUser</actionMapping>
+            <outputActionMapping>urn:addUserResponse</outputActionMapping>
+        </operation>
+        <operation name="changePassword" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://usermanagement.t3.sos.fi.upm.es">
+            <actionMapping>urn:changePassword</actionMapping>
+            <outputActionMapping>urn:changePasswordResponse</outputActionMapping>
+        </operation>
+        <operation name="removeUser" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://usermanagement.t3.sos.fi.upm.es">
+            <actionMapping>urn:removeUser</actionMapping>
+            <outputActionMapping>urn:removeUserResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>
