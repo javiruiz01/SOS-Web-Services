@@ -15,12 +15,12 @@ public class UserManagementWSSkeleton{
 	private User userID;
 
 	public UserManagementWSSkeleton() {
-		// Aqui solo entra el root, que es el primero que tiene que entrar
-		// El problema es que aqui todavia no podemos llamar a iAmRoot
-		if ((!instance) && (!isConnected(root))) {
-			usernameRoot = root.getName();
+		// Hay que ver bien cuando se ejecuta el constructor, en principio lo 
+		// Hace axis2, pero no sabemos cuando
+		if ((!instance) && (connected.isEmpty())) {
 			root.setName("admin");
 			root.setPwd("admin");
+			usernameRoot = root.getName();
 			users.put(usernameRoot, root);
 			// connected.add(root);
 			instance = true;
@@ -93,8 +93,16 @@ public class UserManagementWSSkeleton{
 				// Si entramos aquí, es que coinciden y está bien
 				response.setResponse(true);
 				this.userID.setPwd(passwordPair.getNewpwd());
-				
-				// Falta actualizar el mapa y la lista
+				// Falta actualizar el mapa y la lista?
+				// Empezamos por el mapa
+				users.put(this.userID.getName(), this.userID);
+				// Y ahora la lista
+				for (User update: connected) {
+					if (same(update, this.userID)) {
+						connected.remove(update);
+						connected.add(this.userID);
+					}
+				}
 			}
 		}
 		return response;
@@ -119,9 +127,8 @@ public class UserManagementWSSkeleton{
 	private boolean isConnected (User user) {
 		boolean result = false;
 		for (User user1: connected) {
-			if (user1.getName().equals(user.getName())) {
+			if (same(user1, user)) {
 				result = true;
-				break;
 			}
 		}
 		return result;
