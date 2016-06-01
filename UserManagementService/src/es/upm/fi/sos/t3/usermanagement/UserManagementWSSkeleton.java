@@ -2,6 +2,7 @@ package es.upm.fi.sos.t3.usermanagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class UserManagementWSSkeleton{
 	private static User root = new User();
 	private static String usernameRoot; 
 	private User userID;
+	private static boolean rootIsPresent = false;
 
 	public UserManagementWSSkeleton() {
 		// Hay que ver bien cuando se ejecuta el constructor, en principio lo 
@@ -32,12 +34,20 @@ public class UserManagementWSSkeleton{
 	
 	public void logout(	)
 	{
+		System.out.println("LOGOUT");
+		boolean result = false;
 		// Solo borramos de la lista de connected
 		// Ya que el usuario sigue existiendo, aunque no esté conectado
 		for (User userOut: connected) {
 			if (same(userOut, this.userID)) {
 				connected.remove(userOut);
+				System.out.println("User: " + this.userID.getName() +" Logged out");
+				result = true;
+				break;
 			}
+		}
+		if (!result) {
+			System.out.println("User " + this.userID.getName() + " isn't logged in or doesn't exist");
 		}
 		printList();
 	}
@@ -46,6 +56,7 @@ public class UserManagementWSSkeleton{
 			es.upm.fi.sos.t3.usermanagement.User user
 			)
 	{
+		System.out.println("LOGIN");
 		Response response = new Response();
 		response.setResponse(false);
 		String username = user.getName();
@@ -58,6 +69,12 @@ public class UserManagementWSSkeleton{
 				printList();
 				response.setResponse(true);
 				this.userID = user;
+				if (same(this.userID, root)) {
+					rootIsPresent = true;
+				}
+			} else {
+				System.out.println("Couldn't log in,\n"
+						+ " user " + user.getName() + " already connected or wrong credentials");
 			}
 		}
 		return response;
@@ -67,6 +84,7 @@ public class UserManagementWSSkeleton{
 			es.upm.fi.sos.t3.usermanagement.User user1
 			)
 	{
+		System.out.println("ADD_USER");
 		Response response = new Response();
 		// Username es el nombre del usuario
 		String username1 = user1.getName();
@@ -77,7 +95,10 @@ public class UserManagementWSSkeleton{
 			response.setResponse(true);
 			printMap();
 		} else {
+			System.out.println("Couldn't add user " + user1.getName() + ",\n"
+					+ "It already exists or you don't have the necessary credentials to make this operation ");
 			response.setResponse(false);
+			printMap();
 		}
 		return response;
 	}
@@ -86,6 +107,7 @@ public class UserManagementWSSkeleton{
 			es.upm.fi.sos.t3.usermanagement.PasswordPair passwordPair
 			)
 	{
+		System.out.println("PASSWORD_PAIR");
 		Response response = new Response();
 		response.setResponse(false);
 		// Comprobar si mi userID está en connected, y luego ver si soy root
@@ -108,6 +130,9 @@ public class UserManagementWSSkeleton{
 					}
 				}
 				printList();
+			} else {
+				System.out.println("Couldn't change password for user: " + this.userID.getName() + ",\n"
+						+ "wrong credentials or you don't have the necessary credentials to make this operation");
 			}
 		}
 		return response;
@@ -117,6 +142,7 @@ public class UserManagementWSSkeleton{
 			es.upm.fi.sos.t3.usermanagement.Username username
 			)
 	{
+		System.out.println("REMOVE_USER");
 		Response response = new Response();
 		response.setResponse(false);
 		String username1 = username.getUsername();
@@ -126,6 +152,9 @@ public class UserManagementWSSkeleton{
 			users.remove(username1);
 			printMap();
 			response.setResponse(true);
+		} else {
+			System.out.println("Couldn't remove user " + username.getUsername() + ",\n"
+					+ "user doesn't exists or you don't have the necessary credentials to make this operation");
 		}
 		return response;
 	}
@@ -141,12 +170,18 @@ public class UserManagementWSSkeleton{
 	}
 	
 	private boolean iAmRoot() {
-		return same(this.userID, root) ? true: false;
+		// return same(this.userID, root);
+		boolean result = false;
+		if (rootIsPresent) {
+			same(this.userID, root);
+			result = true;
+		}
+		return result;
 	}
 	
 	private boolean same (User user1, User user2) {
 		return (user1.getName().equals(user2.getName()) &&
-				user1.getPwd().equals(user2.getPwd())) ? true: false;
+				user1.getPwd().equals(user2.getPwd()));
 	}
 	
 	private void printMap () {
@@ -169,6 +204,7 @@ public class UserManagementWSSkeleton{
 			String name = value.getName();
 			String pwd = value.getPwd();
 			System.out.println("List entry [" + i + "] -> Name: " + name + "| Password: " + pwd);
+			i += 1;
 		}
 		System.out.println("========================= </List> =========================\n");
 	}

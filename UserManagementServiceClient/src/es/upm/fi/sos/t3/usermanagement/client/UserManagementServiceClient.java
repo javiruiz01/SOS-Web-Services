@@ -42,16 +42,20 @@ public class UserManagementServiceClient {
 		
 		User yerai = new User();
 		yerai.setName("Yerai");
-		yerai.setPwd("fiestaencasa");
-		System.out.println("Intentamos addUser: " + stub2.addUser(yerai).getResponse());
-		
-		// Ahora vemos que pasa si intentamos hacer un login de un usuario que no está en users, debería dar false
-		System.out.println("Intentamos login: " + stub2.login(yerai).getResponse());
+		yerai.setPwd("fiestaencasa");		
 		
 		// Ahora añadimos a Yerai, cogiendo al root
 		System.out.println("Añadimos usuario: " + yerai.getName() + " = " + stub1.addUser(yerai).getResponse());
 		// Y hacemos login de Yerai
 		System.out.println("login: " + yerai.getName() + " = " + stub3.login(yerai).getResponse());
+		// Ahora hacemos logout de todos, incluso del root, pero este será el último
+		
+//		System.out.println("First logout");
+
+		System.out.println("Second logout");
+		stub3.logout();
+		System.out.println("Third logout");
+		stub2.logout();
 	}
 
 }
